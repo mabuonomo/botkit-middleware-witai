@@ -1,18 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_wit_1 = require("node-wit");
-module.exports = function (config) {
-    if (!config || !config.token) {
-        throw new Error('No wit.ai API token specified');
+class BotKitWit {
+    constructor(config) {
+        this.config = config;
+        if (!config.minimum_confidence) {
+            config.minimum_confidence = 0.5;
+        }
+        this.client = new node_wit_1.Wit({ accessToken: config.token });
     }
-    if (!config.minimum_confidence) {
-        config.minimum_confidence = 0.5;
-    }
-    var client = new node_wit_1.Wit({ accessToken: config.token });
-    var middleware;
-    middleware.receive = function (bot, message, next) {
+    receive(bot, message, next) {
         if (message.text) {
-            client.message(message.text, {})
+            this.client.message(message.text, {})
                 .then((data) => {
                 message.entities = data.entities;
                 message.response = JSON.stringify(data);
@@ -28,19 +27,21 @@ module.exports = function (config) {
         else {
             next();
         }
-    };
-    middleware.heard = function (tests, message) {
+    }
+    ;
+    heard(tests, message) {
         let keys = Object.keys(message.entities);
         while (keys.length > 0) {
             let key = keys.shift();
             let entity = message.entities[key].shift();
             let confidence = entity.confidence;
             if (tests.find((value) => value == key) &&
-                confidence >= config.minimum_confidence) {
+                confidence >= this.config.minimum_confidence) {
                 return true;
             }
         }
         return false;
-    };
-    return middleware;
-};
+    }
+    ;
+}
+exports.BotKitWit = BotKitWit;
