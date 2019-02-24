@@ -2,6 +2,8 @@ import { Wit } from 'node-wit';
 import { NextFunction } from 'express';
 import { IMessageWit } from './types/IMessageWit';
 import { IConfig } from './types/IConfig';
+import { Controller } from 'botkit';
+import { IMiddleware } from './types/IMiddleware';
 
 module.exports = function (config: IConfig) {
     if (!config || !config.token) {
@@ -14,7 +16,7 @@ module.exports = function (config: IConfig) {
 
     var client = new Wit({ accessToken: config.token });
 
-    var middleware;
+    var middleware: IMiddleware;
 
     middleware.receive = function (bot, message: IMessageWit, next: NextFunction) {
         // Only parse messages of type text
@@ -35,7 +37,7 @@ module.exports = function (config: IConfig) {
         }
     };
 
-    middleware.hears = function (tests: Array<string>, message: IMessageWit) {
+    middleware.heard = function (tests: Array<string>, message: IMessageWit) {
         let keys = Object.keys(message.entities);
         while (keys.length > 0) {
             let key: string = keys.shift();
