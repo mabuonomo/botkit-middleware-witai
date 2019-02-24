@@ -44,4 +44,3 @@ module.exports = function (config) {
     };
     return middleware;
 };
-//# sourceMappingURL=botkit-middleware-witai.js.map
