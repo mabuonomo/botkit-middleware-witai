@@ -29,7 +29,7 @@ module.exports = function (config) {
             next();
         }
     };
-    middleware.hears = function (tests, message) {
+    middleware.heard = function (tests, message) {
         let keys = Object.keys(message.entities);
         while (keys.length > 0) {
             let key = keys.shift();
