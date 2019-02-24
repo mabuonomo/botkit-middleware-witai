@@ -9,11 +9,6 @@ export class BotKitWit implements IBotKitWit {
     client: Wit;
     constructor(config: IConfig) {
         this.config = config;
-
-        if (!config.minimum_confidence) {
-            config.minimum_confidence = 0.5;
-        }
-
         this.client = new Wit({ accessToken: config.token });
     }
 

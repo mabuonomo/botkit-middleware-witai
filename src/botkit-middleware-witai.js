@@ -4,9 +4,6 @@ const node_wit_1 = require("node-wit");
 class BotKitWit {
     constructor(config) {
         this.config = config;
-        if (!config.minimum_confidence) {
-            config.minimum_confidence = 0.5;
-        }
         this.client = new node_wit_1.Wit({ accessToken: config.token });
     }
     receive(bot, message, next) {
