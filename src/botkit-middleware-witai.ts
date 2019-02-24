@@ -5,17 +5,21 @@ import { IConfig } from './types/IConfig';
 import { IBotKitWit } from './types/IBotKitWit';
 
 export class BotKitWit implements IBotKitWit {
-    config: IConfig;
-    client: Wit;
-    constructor(config: IConfig) {
-        this.config = config;
-        this.client = new Wit({ accessToken: config.token });
+    private config: IConfig;
+    private client: Wit;
+    constructor(configWit: IConfig) {
+        this.config = configWit;
+        this.client = new Wit({ accessToken: this.config.token });
     }
 
-    public receive(bot, message: IMessageWit, next: NextFunction) {
+    getClientWit = (): Wit => {
+        return this.client;
+    }
+
+    receive = (bot, message: IMessageWit, next: NextFunction) => {
         // Only parse messages of type text
         if (message.text) {
-            this.client.message(message.text, {})
+            this.getClientWit().message(message.text, {})
                 .then((data) => {
                     message.entities = data.entities;
                     message.response = JSON.stringify(data);
@@ -31,7 +35,7 @@ export class BotKitWit implements IBotKitWit {
         }
     };
 
-    public heard(tests: Array<string>, message: IMessageWit) {
+    heard = (tests: Array<string>, message: IMessageWit) => {
         let keys = Object.keys(message.entities);
         while (keys.length > 0) {
             let key: string = keys.shift();

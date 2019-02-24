@@ -4,9 +4,10 @@ import { IMessageWit } from './types/IMessageWit';
 import { IConfig } from './types/IConfig';
 import { IBotKitWit } from './types/IBotKitWit';
 export declare class BotKitWit implements IBotKitWit {
-    config: IConfig;
-    client: Wit;
-    constructor(config: IConfig);
-    receive(bot: any, message: IMessageWit, next: NextFunction): void;
-    heard(tests: Array<string>, message: IMessageWit): boolean;
+    private config;
+    private client;
+    constructor(configWit: IConfig);
+    getClientWit: () => Wit;
+    receive: (bot: any, message: IMessageWit, next: NextFunction) => void;
+    heard: (tests: string[], message: IMessageWit) => boolean;
 }
